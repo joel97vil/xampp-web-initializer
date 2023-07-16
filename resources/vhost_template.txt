@@ -1,5 +1,5 @@
-<VirtualHost #URL#:80>
-    DocumentRoot "#INDEX_PATH#"
-	ServerName #URL#
-    ServerAlias www.#URL#
+<VirtualHost [URL]:[PORT]>
+    DocumentRoot "[INDEX_PATH]"
+    ServerName [URL]
+    ServerAlias www.[URL]
 </VirtualHost>

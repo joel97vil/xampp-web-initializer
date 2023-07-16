@@ -9,17 +9,20 @@ yellow="\e[0;33m\033[1m"
 purpler="\e[0;35m\033[1m"
 turquoise="\e[0;36m\033[1m"
 gray="\e[0;37m\033[1m"
+trap crtl_c INT
 
 
 ### SCRIPT VARIABLES SECTION
 indexPath=""
+originalIndexPath=""    #Windows path format
 url="www.example.com"
-hostsFile="/c/Windows/System32/drivers/etc/hosts_test"   #Default path for Windows
+port="80"
+hostsFile="/c/Windows/System32/drivers/etc/hosts"   #Default path for Windows
 vhostsFile="/c/xampp/apache/conf/extra/httpd-vhosts.conf"   #Default path for Windows
 
 
 ### SCRIPT CONSTANTS SECTION
-htaccessTemplate="./resoures/htaccess_template.txt"
+htaccessTemplate="./resources/htaccess_template.txt"
 vhostsTemplate="./resources/vhost_template.txt"
 
 
@@ -30,15 +33,16 @@ function ctrl_c() {
 }
 
 function help() {
-    echo -e "\n${gray}Usage:\n\n${blue} $0 -u [URL] -i [INDEX]${endColour}"
-    echo -e "\n\t${yellow}-u${gray} The main url to host the page${green} Ex: www.example.com ${endColour}"
-    echo -e "\n\t${yellow}-i${gray} The absolute path of the ${red}FOLDER${gray} which containts [index.php] or [index.html] file ${green} Ex: C:/xampp/htdocs/example/public ${endColour}"
-    #echo -e "\n\t${yellow}-v${gray} [OPTIONAL] The absolute path of the virtual host XAMPP configuration file ${green} Ex: ${vhosts_file} ${endColour}"
-    #echo -e "\n\t${yellow}-h${gray} [OPTIONAL ]The absolute path of the local machine host resolver file ${green} Ex: ${hosts_file} ${endColour}"
+    echo -e "\n${gray}Usage:\n\n${blue} $0 -u [URL] -i [INDEX] ...${endColour}"
+    echo -e "\n\t${yellow}-u${gray}     [REQUIRED] The domain (main url) to host the page (without www)${green} Ex: example.com ${endColour}"
+    echo -e "\n\t${yellow}-i${gray}     [REQUIRED] The absolute path of the ${red}FOLDER${gray} which containts [index.php] or [index.html] file. (avoid : character on folders) ${green} Ex: C:/xampp/htdocs/example/public ${endColour}"
+    #echo -e "\n\t${yellow}-p${gray}     [OPTIONAL] The port of the virtual host of the page (default 80) ${green} Ex: 443 ${endColour}"
+    #echo -e "\n\t${yellow}-v${gray}     [OPTIONAL] The absolute path of the virtual host XAMPP configuration file ${green} Ex: ${vhostsFile} ${endColour}"
+    #echo -e "\n\t${yellow}-h${gray}     [OPTIONAL] The absolute path of the local machine host resolver file ${green} Ex: ${hostsFile} ${endColour}"
 }
 
 function syntax_error() {
-    echo -e "${red}Error on parameters: ${gray} check usage guide${endColour}"
+    echo -e "${red}Error on parameters: URL or INDEX parameters weren't given ${gray} Check usage guide${endColour}"
 }
 
 function success() {
@@ -46,47 +50,54 @@ function success() {
 }
 
 function beautify_index_path() {
-    indexPath="$( echo -e ${indexPath} | tr '\' '/' )"
+    originalIndexPath=${indexPath}
+    indexPath="$( echo ${indexPath} | tr '\\' '/' | tr -d ':' )"
+    #TODO: If the indexPath doesn't start with a slash, add it manually (to make always a absolute path)
+    #TODO: If the indexPath lasts with a slash, remove it manually (to make always a absolute path)
 }
 
 function write_config_files() {
-    #TODO Append to the virtual host machine the virtual host config (from the default XAMPP template)
+    #Append to the virtual host machine the virtual host config (from the default XAMPP template)
+    #vhostConfig=$( cat ${vhostsTemplate} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@")
+    #echo "${vhostConfig}"
+    #$( echo "${vhostsConfig}" >> "${vhostsFile}" 2>> "./logs/errors.txt")
+
+    $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> "./logs/errors.txt")
+    $( cat ${vhostsFile} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@" > ${vhostsFile})
     
     #Append to the local machine host resolver file a new line with the URL
-    echo "$( printf \\n127.0.0.1 >> ${hostsFile})"
-    echo "$( printf '    ' >> ${hostsFile})"
-    echo "$( printf ${url} >> ${hostsFile})"
+    $( printf "127.0.0.1      ${url}" >> ${hostsFile})
+    $( printf "127.0.0.1      www.${url}" >> ${hostsFile})
 }
 
 function copy_htaccess_file() {
-    echo "$( cp ${htaccessTemplate} ${indexPath}/.htaccess)"
+    $( cp "${htaccessTemplate}" "${indexPath}/.htaccess")
 }
 
 
 ### RUN SECTION
-trap crtl_c INT
 
 # Getting the params
-#while getopts "u:i:v:h" args;do
-while getopts "u:i" args;do
+#while getopts "u:i:p:v:h:help:" args;do
+while getopts "u:i:" args;do
     case $args in
         u) url=$OPTARG;; #URL (REQUIRED)
         i) indexPath=$OPTARG;; #INDEX.PHP OR INDEX.HTML PATH (REQUIRED)
+        #p) vhosts_file=$OPTARG;; #VHOST PORT (NOT-REQUIRED, DEFAULT 80)
         #v) vhosts_file=$OPTARG;; #VHOST CONFIG PATH (NOT-REQUIRED, DEFAULT WINDOWS)
         #h) hosts_file=$OPTARG;; #HOSTS RESOLVE PATH (NOT-REQUIRED, DEFAULT WINDOWS)
+        #help) help;;
     esac
 done
 
-echo "url=${url} indexPath=${indexPath}" #debug variable status
 if ([ $url ] && [ $indexPath ]); then
     beautify_index_path
-    if([ -d indexPath ]); then
+    if([ -d $indexPath ]); then
         write_config_files
         copy_htaccess_file
         success
     else
-        #TODO: Folder doesn't exist
-        echo -e "The index web folder ${red}was not found.${endColour}"
+        echo -e "${red}${indexPath} was not found.${endColour}"
     fi
 else
     syntax_error
