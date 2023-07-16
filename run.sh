@@ -38,7 +38,11 @@ function help() {
 }
 
 function syntax_error() {
-    echo -e "\n${red}Error on parameters: ${gray} check usage guide${endColour}"
+    echo -e "${red}Error on parameters: ${gray} check usage guide${endColour}"
+}
+
+function success() {
+    echo -e "${green}The web app has been configured for developing in local successfully. You can now access going ${yellow}${url}${green} on your browser. Remember to startup Apache! ${endColor}"
 }
 
 function beautify_index_path() {
@@ -49,13 +53,13 @@ function write_config_files() {
     #TODO Append to the virtual host machine the virtual host config (from the default XAMPP template)
     
     #Append to the local machine host resolver file a new line with the URL
-    echo -e "$( printf \\n127.0.0.1 >> ${hostsFile})"
-    echo -e "$( printf '    ' >> ${hostsFile})"
-    echo -e "$( printf ${url} >> ${hostsFile})"
+    echo "$( printf \\n127.0.0.1 >> ${hostsFile})"
+    echo "$( printf '    ' >> ${hostsFile})"
+    echo "$( printf ${url} >> ${hostsFile})"
 }
 
 function copy_htaccess_file() {
-    echo -e "$( cp ${htaccessTemplate} ${indexPath}/.htaccess)"
+    echo "$( cp ${htaccessTemplate} ${indexPath}/.htaccess)"
 }
 
 
@@ -74,15 +78,15 @@ while getopts "u:i" args;do
 done
 
 echo "url=${url} indexPath=${indexPath}" #debug variable status
-write_config_files
 if ([ $url ] && [ $indexPath ]); then
     beautify_index_path
     if([ -d indexPath ]); then
-
+        write_config_files
         copy_htaccess_file
+        success
     else
         #TODO: Folder doesn't exist
-        echo "The index web folder ${red}was not found.${endColour}"
+        echo -e "The index web folder ${red}was not found.${endColour}"
     fi
 else
     syntax_error
