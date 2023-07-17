@@ -1,22 +1,58 @@
 # XAMPP Web Inicializer
-A simple shell application which initializes and configures all the needed things for a web application on XAMPP (tested on v3.3.0 version) to start developing in a local development environment, letting you have a real domain name on your URL.
+A simple shell/batch application which initializes and configures all the needed configuration files for startup a web application on XAMPP (tested on v3.3.0 version) in a local development environment, letting you have a real domain name on your URL working in localhost. The program configures all the needed files to start a virtualhost with the given name and the given path.
+<br />
 This can startup web applications like WordPress, Laravel or Yii2 easily and quickly, making you forget about first configuration part.
 
-
-## Windows pre-requisites
-<b>Install/enable a Bash Shell</b>
-- Option 1: Enable Bash Shell compatibility on Windows features configuration (available on Windows 10 or more).
-- Option 2: Install GitHub Desktop, which installs a built-in Bash Shell.
-- Option 3: <i>Others, coming soon...</i>
-
-
-## Linux-Debian pre-requisites
-<b>None</b> - Bash Shell is built-in installed on Linux - Debian operating systems (like Ubuntu).
-
-
 # Usage
-To use this program in order to initialize a web configuration, <b>startup a Bash Shell as root/Administrator</b>.
-<code>./run.sh -u example.com -i /c/xampp/htdocs/test/public</code>
+Depending on your operating system...
+
+## Windows Usage
+To use this program in order to initialize a web configuration, <b>startup a Batch (cmd) as Administrator</b>.
+<br />
+<code>./run.bat /u example.com /i C:\xampp\htdocs\test\public [OPTIONAL PARAMS...]</code>
+
+<table>
+    <tr>
+        <th>Parameter</th>
+        <th>Description</th>
+        <th>Example</th>
+    </tr>
+    <tr>
+        <td><code>u</code></td>
+        <td>[REQUIRED] The domain (main url) to host the page (without www)</td>
+        <td><code>\u example.com</code></td>
+    </tr>
+    <tr>
+        <td><code>i</code></td>
+        <td>[REQUIRED] The absolute path of the which containts [index.php] or [index.html] file. (avoid : character on folders)</td>
+        <td><code>/i C:\xampp\htdocs\example\public</code></td>
+    </tr>
+    <tr>
+        <td><code>p</code></td>
+        <td>[OPTIONAL] The port of the virtual host of the page (default 80)</td>
+        <td><code>/p 443</code></td>
+    </tr>
+    <tr>
+        <td><code>v</code></td>
+        <td>[OPTIONAL] The absolute path of the virtual host XAMPP configuration file</td>
+        <td><code>/v C:\xampp\apache\conf\extra\httpd-vhosts.conf</code></td>
+    </tr>
+    <tr>
+        <td><code>h</code></td>
+        <td>[OPTIONAL] The absolute path of the local machine host resolver file</td>
+        <td><code>/h C:\Windows\System32\drivers\etc\hosts</code></td>
+    </tr>
+    <tr>
+        <td><code>help</code></td>
+        <td>Information about the program usage, the available parameters and how to use them</td>
+        <td><code>/help</code></td>
+    </tr>
+</table>
+
+## Linux-Debian Usage
+To use this program in order to initialize a web configuration, <b>startup a Bash Shell as root</b>.
+<br />
+<code>./run.sh -u example.com -i /c/xampp/htdocs/test/public [OPTIONAL PARAMS...]</code>
 
 <table>
     <tr>
@@ -31,8 +67,8 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
     </tr>
     <tr>
         <td><code>i</code></td>
-        <td>[REQUIRED] The absolute path of the ${red}FOLDER${gray} which containts [index.php] or [index.html] file. (avoid : character on folders)</td>
-        <td><code>-i /c/xampp/htdocs/example/public</code></td>
+        <td>[REQUIRED] The absolute path of the which containts [index.php] or [index.html] file. (avoid : character on folders)</td>
+        <td><code>-i /opt/lampp/htdocs/example/public</code></td>
     </tr>
     <tr>
         <td><code>p</code></td>
@@ -42,12 +78,12 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
     <tr>
         <td><code>v</code></td>
         <td>[OPTIONAL] The absolute path of the virtual host XAMPP configuration file</td>
-        <td><code>-v /c/Windows/System32/drivers/etc/hosts</code></td>
+        <td><code>-v /opt/lampp/etc/extra/httpd-vhosts.conf</code></td>
     </tr>
     <tr>
         <td><code>h</code></td>
         <td>[OPTIONAL] The absolute path of the local machine host resolver file</td>
-        <td><code>-h /c/xampp/apache/conf/extra/httpd-vhosts.conf</code></td>
+        <td><code>-h /etc/hosts</code></td>
     </tr>
     <tr>
         <td><code>help</code></td>
@@ -58,15 +94,14 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 
 
 
-
 ## Future features
-[x] XAMPP compatibility (Windows).
-[] Path parameters passed to the program using Windows layout (C:\)
-[] LAMPP compatibility (XAMPP for Linux - Debian).
-[] Adding additional parameters (-help, -port and more...)
-[] Various built-in default configurations for different development environments (Windows / Linux-Debian / iOS?).
-[] Alias generation to use the program command from any path of the system
-[] Execute the program with all needed permissions to edit the configuration files
+- [ ] XAMPP compatibility Windows.
+- [X] LAMPP compatibility for Linux - Debian.
+- [ ] Adding additional parameters (-help, -port and more...)
+- [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
+- [ ] Alias generation to use the program command from any path of the system
+- [ ] Execute the program with all needed permissions to edit the configuration files
+- [ ] GUI for Windows
 More...
 
 

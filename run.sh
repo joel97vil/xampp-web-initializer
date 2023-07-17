@@ -14,11 +14,12 @@ trap crtl_c INT
 
 ### SCRIPT VARIABLES SECTION
 indexPath=""
-originalIndexPath=""    #Windows path format
-url="www.example.com"
+url="example.com"
 port="80"
-hostsFile="/c/Windows/System32/drivers/etc/hosts"   #Default path for Windows
-vhostsFile="/c/xampp/apache/conf/extra/httpd-vhosts.conf"   #Default path for Windows
+hostsFile="/etc/hosts"   #Default path for Ubuntu or "/etc/resolv.conf"
+vhostsFile="/opt/lampp/etc/extra/httpd-vhosts.conf"   #Default path for Ubuntu
+vconfigFile="/opt/lampp/etc/httpd.conf" #Default apache config file to enable/disable virtual hosts
+vconfigLine="#Include etc/extra/httpd-vhosts.conf" #Include remove commented line in config (#487 maybe)
 
 
 ### SCRIPT CONSTANTS SECTION
@@ -50,7 +51,6 @@ function success() {
 }
 
 function beautify_index_path() {
-    originalIndexPath=${indexPath}
     indexPath="$( echo ${indexPath} | tr '\\' '/' | tr -d ':' )"
     #TODO: If the indexPath doesn't start with a slash, add it manually (to make always a absolute path)
     #TODO: If the indexPath lasts with a slash, remove it manually (to make always a absolute path)
@@ -58,12 +58,11 @@ function beautify_index_path() {
 
 function write_config_files() {
     #Append to the virtual host machine the virtual host config (from the default XAMPP template)
-    #vhostConfig=$( cat ${vhostsTemplate} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@")
+    vhostConfig=$( cat ${vhostsTemplate} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@")
     #echo "${vhostConfig}"
-    #$( echo "${vhostsConfig}" >> "${vhostsFile}" 2>> "./logs/errors.txt")
-
-    $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> "./logs/errors.txt")
-    $( cat ${vhostsFile} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@" > ${vhostsFile})
+    $( echo "${vhostsConfig}" >> "${vhostsFile}" 2>> "./logs/errors.txt")
+    #$( cat ${vhostsTemplate} >> ${vhostsFile} 2>> "./logs/errors.txt")
+    #$( cat ${vhostsFile} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@" > ${vhostsFile})
     
     #Append to the local machine host resolver file a new line with the URL
     $( printf "127.0.0.1      ${url}" >> ${hostsFile})
@@ -72,6 +71,12 @@ function write_config_files() {
 
 function copy_htaccess_file() {
     $( cp "${htaccessTemplate}" "${indexPath}/.htaccess")
+}
+
+function enable_virtual_hosts_usage(){
+    #TODO:  Locate the line which enables virtual host usage on config file
+    $( cat "${vconfigFile} | grep ${vconfigLine}")
+    #       if no # found, next step, if # found, remove to enable the usage
 }
 
 
@@ -91,6 +96,7 @@ while getopts "u:i:" args;do
 done
 
 if ([ $url ] && [ $indexPath ]); then
+    enable_virtual_hosts_usage
     beautify_index_path
     if([ -d $indexPath ]); then
         write_config_files
