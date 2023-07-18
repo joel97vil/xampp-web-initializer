@@ -14,7 +14,7 @@ trap crtl_c INT
 
 ### SCRIPT VARIABLES SECTION
 indexPath=""
-url="example.com"
+url=""
 port="80"
 hostsFile="/etc/hosts"   #Default path for Ubuntu or "/etc/resolv.conf"
 vhostsFile="/opt/lampp/etc/extra/httpd-vhosts.conf"   #Default path for Ubuntu
@@ -58,15 +58,15 @@ function beautify_index_path() {
 
 function write_config_files() {
     #Append to the virtual host machine the virtual host config (from the default XAMPP template)
-    vhostConfig=$( cat ${vhostsTemplate} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@")
-    #echo "${vhostConfig}"
-    $( echo "${vhostsConfig}" >> "${vhostsFile}" 2>> "./logs/errors.txt")
-    #$( cat ${vhostsTemplate} >> ${vhostsFile} 2>> "./logs/errors.txt")
-    #$( cat ${vhostsFile} | sed -e "s@\[URL\]@${url}@" | sed "s@\[PORT\]@${port}@" | sed "s@\[INDEX_PATH\]@${indexPath}@" > ${vhostsFile})
+    $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> "./logs/errors.txt")
+    #Set configuration to the new virtualhost added on virtualhosts file
+    $( sed -e "s@\[URL\]@${url}@" "${vhostsFile}") 
+    $( sed -e "s@\[PORT\]@${port}@" "${vhostsFile}")
+    $( sed -e "s@\[INDEX_PATH\]@${indexPath}@" "${vhostsFile}")
     
     #Append to the local machine host resolver file a new line with the URL
-    $( printf "127.0.0.1      ${url}" >> ${hostsFile})
-    $( printf "127.0.0.1      www.${url}" >> ${hostsFile})
+    $( echo "127.0.0.1      ${url}" | tee -a ${hostsFile})
+    $( echo "127.0.0.1      www.${url}" | tee -a ${hostsFile})
 }
 
 function copy_htaccess_file() {
@@ -74,9 +74,12 @@ function copy_htaccess_file() {
 }
 
 function enable_virtual_hosts_usage(){
-    #TODO:  Locate the line which enables virtual host usage on config file
-    $( cat "${vconfigFile} | grep ${vconfigLine}")
-    #       if no # found, next step, if # found, remove to enable the usage
+    #Locate the line which enables virtual host usage on config file
+    commentedLine=$( cat "${vconfigFile}" | grep "'${vconfigLine}'")
+    #if comment found, remove to enable the usage
+    if ([ $commentedLine ]); then
+        $(sed -i "'s|^${vconfigLine}conf$|Include ${vhostsFile}|'" "${vconfigFile}")
+    fi
 }
 
 
@@ -95,6 +98,12 @@ while getopts "u:i:" args;do
     esac
 done
 
+# Check if the script is being run as root
+if [ "$(id -u)" -ne 0 ]; then
+  echo -e "${red}This script must be run as root. {$gray}Please use 'sudo' to execute it.${endColour}"
+  exit 1
+fi
+
 if ([ $url ] && [ $indexPath ]); then
     enable_virtual_hosts_usage
     beautify_index_path
@@ -103,7 +112,7 @@ if ([ $url ] && [ $indexPath ]); then
         copy_htaccess_file
         success
     else
-        echo -e "${red}${indexPath} was not found.${endColour}"
+        echo -e "${red}${indexPath} was not found. Please, make sure where's the correct web path. ${endColour}"
     fi
 else
     syntax_error

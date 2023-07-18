@@ -3,10 +3,10 @@ A simple shell/batch application which initializes and configures all the needed
 <br />
 This can startup web applications like WordPress, Laravel or Yii2 easily and quickly, making you forget about first configuration part.
 
-# Usage
+## Usage
 Depending on your operating system...
 
-## Windows Usage
+### Windows Usage
 To use this program in order to initialize a web configuration, <b>startup a Batch (cmd) as Administrator</b>.
 <br />
 <code>./run.bat /u example.com /i C:\xampp\htdocs\test\public [OPTIONAL PARAMS...]</code>
@@ -20,7 +20,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bat
     <tr>
         <td><code>u</code></td>
         <td>[REQUIRED] The domain (main url) to host the page (without www)</td>
-        <td><code>\u example.com</code></td>
+        <td><code>/u example.com</code></td>
     </tr>
     <tr>
         <td><code>i</code></td>
@@ -49,7 +49,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bat
     </tr>
 </table>
 
-## Linux-Debian Usage
+### Linux-Debian Usage
 To use this program in order to initialize a web configuration, <b>startup a Bash Shell as root</b>.
 <br />
 <code>./run.sh -u example.com -i /c/xampp/htdocs/test/public [OPTIONAL PARAMS...]</code>
@@ -92,23 +92,19 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
     </tr>
 </table>
 
-
-
 ## Future features
 - [ ] XAMPP compatibility Windows.
 - [X] LAMPP compatibility for Linux - Debian.
 - [ ] Adding additional parameters (-help, -port and more...)
 - [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
 - [ ] Alias generation to use the program command from any path of the system
-- [ ] Execute the program with all needed permissions to edit the configuration files
+- [X] Require to execute the program with all needed permissions to edit the configuration files
 - [ ] GUI for Windows
 More...
-
 
 ## Security Vulnerabilities and Contributing
 If you discover a bugs or security vulnerabilities, please send an e-mail to me via [joel97vil@gmail.com](mailto:joel97vil@gmail.com). Any collaboration will be thankful.
 Feel free to create your own forks to improve the script or fix the bugs and security vulnerabilities.
-
 
 ## License
 <i>XAMPP Web Initializer</i> is a Shell based project, open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
