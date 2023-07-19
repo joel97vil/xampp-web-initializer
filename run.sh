@@ -19,12 +19,13 @@ port="80"
 hostsFile="/etc/hosts"   #Default path for Ubuntu or "/etc/resolv.conf"
 vhostsFile="/opt/lampp/etc/extra/httpd-vhosts.conf"   #Default path for Ubuntu
 vconfigFile="/opt/lampp/etc/httpd.conf" #Default apache config file to enable/disable virtual hosts
-vconfigLine="#Include etc/extra/httpd-vhosts.conf" #Include remove commented line in config (#487 maybe)
 
 
 ### SCRIPT CONSTANTS SECTION
 htaccessTemplate="./resources/htaccess_template.txt"
 vhostsTemplate="./resources/vhost_template.txt"
+vconfigLine="#Include etc/extra/httpd-vhosts.conf" #Include remove commented line in config (#487 maybe)
+logsFile="./logs/errors.txt"
 
 
 ### FUNCTIONS SECTION
@@ -48,6 +49,7 @@ function syntax_error() {
 
 function success() {
     echo -e "${green}The web app has been configured for developing in local successfully. You can now access going ${yellow}${url}${green} on your browser. Remember to startup Apache! ${endColor}"
+    exit 0
 }
 
 function beautify_index_path() {
@@ -58,11 +60,11 @@ function beautify_index_path() {
 
 function write_config_files() {
     #Append to the virtual host machine the virtual host config (from the default XAMPP template)
-    $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> "./logs/errors.txt")
+    $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> ${logsFile})
     #Set configuration to the new virtualhost added on virtualhosts file
-    $( sed -e "s@\[URL\]@${url}@" "${vhostsFile}") 
-    $( sed -e "s@\[PORT\]@${port}@" "${vhostsFile}")
-    $( sed -e "s@\[INDEX_PATH\]@${indexPath}@" "${vhostsFile}")
+    $( sed -e --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -e --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -e --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
     
     #Append to the local machine host resolver file a new line with the URL
     $( echo "127.0.0.1      ${url}" | tee -a ${hostsFile})
@@ -70,7 +72,7 @@ function write_config_files() {
 }
 
 function copy_htaccess_file() {
-    $( cp "${htaccessTemplate}" "${indexPath}/.htaccess")
+    $( cp "${htaccessTemplate}" "${indexPath}/htaccess")
 }
 
 function enable_virtual_hosts_usage(){
@@ -100,7 +102,7 @@ done
 
 # Check if the script is being run as root
 if [ "$(id -u)" -ne 0 ]; then
-  echo -e "${red}This script must be run as root. {$gray}Please use 'sudo' to execute it.${endColour}"
+  echo -e "${red}This script must be run as root. ${gray}Please use 'sudo' to execute it.${endColour}"
   exit 1
 fi
 
@@ -117,4 +119,5 @@ if ([ $url ] && [ $indexPath ]); then
 else
     syntax_error
     help
+    exit 1
 fi

@@ -3,8 +3,30 @@ A simple shell/batch application which initializes and configures all the needed
 <br />
 This can startup web applications like WordPress, Laravel or Yii2 easily and quickly, making you forget about first configuration part.
 
+## Table of contents
+- [Requirements](#requirements)
+    - [Windows Requirements](#windows-requirements)
+    - [Linux-Debian Requirements](#linux-debian-requirements)
+- [Usage](#usage)
+    - [Windows Usage](#windows-usage)
+    - [Linux-Debian Usage](#linux-debian-usage)
+- [Features](#features)
+- [Future features](#future-features)
+- [License](#security-vulnerabilities-and-contributing)
+- [License](#license)
+
+## Requirements
+Depending on your operating system: 
+
+### Windows Requirements
+Powershell installed. Windows 8 or newer already has built-in installed Powershell.
+
+### Linux-Debian Requirements
+Execution permissions (depending where the project folder is located, it already has). <br />
+<code>chmod -R 755 ./xampp-web-initializer/* </code>
+
 ## Usage
-Depending on your operating system...
+Depending on your operating system:
 
 ### Windows Usage
 To use this program in order to initialize a web configuration, <b>startup a Batch (cmd) as Administrator</b>.
@@ -52,7 +74,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bat
 ### Linux-Debian Usage
 To use this program in order to initialize a web configuration, <b>startup a Bash Shell as root</b>.
 <br />
-<code>./run.sh -u example.com -i /c/xampp/htdocs/test/public [OPTIONAL PARAMS...]</code>
+<code>sudo ./run.sh -u example.com -i /c/xampp/htdocs/test/public [OPTIONAL PARAMS...]</code>
 
 <table>
     <tr>
@@ -92,14 +114,17 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
     </tr>
 </table>
 
+## Features
+
 ## Future features
 - [ ] XAMPP compatibility Windows.
 - [X] LAMPP compatibility for Linux - Debian.
+- [ ] Make backup of configuration files before execute the process.
 - [ ] Adding additional parameters (-help, -port and more...)
 - [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
-- [ ] Alias generation to use the program command from any path of the system
-- [X] Require to execute the program with all needed permissions to edit the configuration files
-- [ ] GUI for Windows
+- [ ] Alias generation to use the program command from any path of the system.
+- [X] Require to execute the program with all needed permissions to edit the configuration files.
+- [ ] GUI for Windows.
 More...
 
 ## Security Vulnerabilities and Contributing
