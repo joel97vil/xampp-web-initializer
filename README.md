@@ -1,7 +1,7 @@
 # XAMPP Web Inicializer
-A simple shell/batch application which initializes and configures all the needed configuration files for startup a web application on XAMPP (tested on v3.3.0 version) in a local development environment, letting you have a real domain name on your URL working in localhost. The program configures all the needed files to start a virtualhost with the given name and the given path.
+A simple shell/batch application which **initializes and configures all the needed configuration files to startup a web application on XAMPP Apache server** (tested on v3.3.0 version) in a local development environment, letting you have a real domain name on your URL working in localhost. The program configures all the needed files to start a virtualhost with the given name and the given path.
 <br />
-This can startup web applications like WordPress, Laravel or Yii2 easily and quickly, making you forget about first configuration part.
+This can startup Apache hosted web applications like WordPress, Laravel or Yii2 easily and quickly, making you forget about first configuration part.
 
 ## Table of contents
 - [Requirements](#requirements)
@@ -12,7 +12,7 @@ This can startup web applications like WordPress, Laravel or Yii2 easily and qui
     - [Linux-Debian Usage](#linux-debian-usage)
 - [Features](#features)
 - [Future features](#future-features)
-- [License](#security-vulnerabilities-and-contributing)
+- [Security, Vulnerabilities and Contributing](#security-vulnerabilities-and-contributing)
 - [License](#license)
 
 ## Requirements
@@ -115,8 +115,6 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 </table>
 
 ## Features
-
-## Future features
 - [ ] XAMPP compatibility Windows.
 - [X] LAMPP compatibility for Linux - Debian.
 - [ ] Make backup of configuration files before execute the process.
@@ -124,10 +122,13 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 - [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
 - [ ] Alias generation to use the program command from any path of the system.
 - [X] Require to execute the program with all needed permissions to edit the configuration files.
+
+## Future features
 - [ ] GUI for Windows.
+- [ ] GUI for Linux - Debian
 More...
 
-## Security Vulnerabilities and Contributing
+## Security, Vulnerabilities and Contributing
 If you discover a bugs or security vulnerabilities, please send an e-mail to me via [joel97vil@gmail.com](mailto:joel97vil@gmail.com). Any collaboration will be thankful.
 Feel free to create your own forks to improve the script or fix the bugs and security vulnerabilities.
 

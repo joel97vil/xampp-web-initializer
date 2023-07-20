@@ -62,17 +62,17 @@ function write_config_files() {
     #Append to the virtual host machine the virtual host config (from the default XAMPP template)
     $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> ${logsFile})
     #Set configuration to the new virtualhost added on virtualhosts file
-    $( sed -e --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
-    $( sed -e --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
-    $( sed -e --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -ie --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -ie --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -ie --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
     
     #Append to the local machine host resolver file a new line with the URL
-    $( echo "127.0.0.1      ${url}" | tee -a ${hostsFile})
-    $( echo "127.0.0.1      www.${url}" | tee -a ${hostsFile})
+    $( echo -e "127.0.0.1      ${url}" | tee -a ${hostsFile} 2>> ${logsFile})
+    $( echo -e "127.0.0.1      www.${url}" | tee -a ${hostsFile} 2>> ${logsFile})
 }
 
 function copy_htaccess_file() {
-    $( cp "${htaccessTemplate}" "${indexPath}/htaccess")
+    $( cp "${htaccessTemplate}" "${indexPath}/htaccess" 2>> ${logsFile})
 }
 
 function enable_virtual_hosts_usage(){
@@ -80,7 +80,7 @@ function enable_virtual_hosts_usage(){
     commentedLine=$( cat "${vconfigFile}" | grep "'${vconfigLine}'")
     #if comment found, remove to enable the usage
     if ([ $commentedLine ]); then
-        $(sed -i "'s|^${vconfigLine}conf$|Include ${vhostsFile}|'" "${vconfigFile}")
+        $(sed -ie "'s|^${vconfigLine}conf$|Include ${vhostsFile}|'" "${vconfigFile}" 2>> ${logsFile})
     fi
 }
 
