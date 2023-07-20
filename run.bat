@@ -19,34 +19,34 @@ set port="80"
 
 
 :: ## SCRIPT CONSTANTS SECTION ##
-set htaccessTemplate=".\resources\htaccess_template.txt"
-set vhostsTemplate=".\resources\vhost_template.txt"
+set htaccessTemplate=".\resources\htaccess.tmpl"
+set vhostsTemplate=".\resources\vhost.tmpl"
 set hostsFile="C:\Windows\System32\drivers\etc\hosts"   REM Default path for Windows
 set vhostsFile="C:\xampp\apache\conf\extra\httpd-vhosts.conf"   REM Default path for Windows
-set logsFile=".\logs\errors.txt"
+set logsFile=".\logs\errors.log"
 
 
 :: ## FUNCTIONS SECTION ##
 :ctrl_c
-    echo -e "%red%[!]%gray% Exiting ...%endColour%"
+    echo "%red%[!]%gray% Exiting ...%endColour%"
 exit /B 1
 
 
 :help
-    echo -e "\n%gray%Usage:\n\n%blue% $0 /u [URL] /i [INDEX] ...%endColour%"
-    echo -e "\n\t%yellow}%/u%gray%     [REQUIRED] The domain (main url) to host the page (without www)%green% Ex: example.com %endColour%"
-    echo -e "\n\t%yellow}%/i%gray%     [REQUIRED] The absolute path of the %red%FOLDER%gray% which containts [index.php] or [index.html] file. (avoid : character on folders) %green% Ex: C:/xampp/htdocs/example/public %endColour%"
-    echo -e "\n\t%yellow%/p%gray%     [OPTIONAL] The port of the virtual host of the page (default 80) %green% Ex: 443 %endColour%"
-    ::echo -e "\n\t%yellow%/v%gray%     [OPTIONAL] The absolute path of the virtual host XAMPP configuration file %green% Ex: %vhostsFile% %endColour%"
-    ::echo -e "\n\t%yellow%/h%gray%     [OPTIONAL] The absolute path of the local machine host resolver file %green% Ex: %hostsFile% %endColour%"
+    echo "\n%gray%Usage:\n\n%blue% $0 /u [URL] /i [INDEX] ...%endColour%"
+    echo "\n\t%yellow}%/u%gray%     [REQUIRED] The domain (main url) to host the page (without www)%green% Ex: example.com %endColour%"
+    echo "\n\t%yellow}%/i%gray%     [REQUIRED] The absolute path of the %red%FOLDER%gray% which containts [index.php] or [index.html] file. (avoid : character on folders) %green% Ex: C:/xampp/htdocs/example/public %endColour%"
+    echo "\n\t%yellow%/p%gray%     [OPTIONAL] The port of the virtual host of the page (default 80) %green% Ex: 443 %endColour%"
+    ::echo "\n\t%yellow%/v%gray%     [OPTIONAL] The absolute path of the virtual host XAMPP configuration file %green% Ex: %vhostsFile% %endColour%"
+    ::echo "\n\t%yellow%/h%gray%     [OPTIONAL] The absolute path of the local machine host resolver file %green% Ex: %hostsFile% %endColour%"
 exit
 
 :syntax_error
-    echo -e "%red%Error on parameters: URL or INDEX parameters weren't given %gray% Check usage guide%endColour%"
+    echo "%red%Error on parameters: URL or INDEX parameters weren't given %gray% Check usage guide%endColour%"
 exit
 
 :success
-    echo -e "%green%The web app has been configured for developing in local successfully. You can now access going %yellow%%url%%green% on your browser. Remember to startup Apache! %endColor%"
+    echo "%green%The web app has been configured for developing in local successfully. You can now access going %yellow%%url%%green% on your browser. Remember to startup Apache! %endColor%"
 exit
 
 :beautify_index_path
@@ -59,16 +59,16 @@ exit
 :write_config_files
     ::Append to the virtual host machine the virtual host config (from the default XAMPP template)
     type %vhostsTemplate% >> %vhostsFile% 2>> %logsFile%)
-    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[URL\]', '%url%' | Set-Content '%vhostsFile%'"
-    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[PORT\]', '%port%' | Set-Content '%vhostsFile%'"
-    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[INDEX_PATH\]', '%indexPath%' | Set-Content '%vhostsFile%'"
+    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[URL\]', '%url%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
+    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[PORT\]', '%port%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
+    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[INDEX_PATH\]', '%indexPath%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
     ::Append to the local machine host resolver file a new line with the URL
-    type "127.0.0.1      %url%" >> "%hostsFile%")
-    type "127.0.0.1      www.%url%" >> "%hostsFile%")
+    type "127.0.0.1      %url%" >> "%hostsFile%" 2>> %logsFile%)
+    type "127.0.0.1      www.%url%" >> "%hostsFile%" 2>> %logsFile%)
 exit
 
 :copy_htaccess_file
-    copy "%htaccessTemplate%" "%indexPath%/.htaccess"
+    copy "%htaccessTemplate%" "%indexPath%/.htaccess" 2>> %logsFile%
 exit
 
 
@@ -91,7 +91,7 @@ if ([ %url% ] && [ %indexPath% ]); then
         CALL :copy_htaccess_file
         CALL :success
     else
-        echo -e "%red%%indexPath% was not found.%endColour%"
+        echo "%red%%indexPath% was not found.%endColour%"
     end if
 else
     CALL :syntax_error

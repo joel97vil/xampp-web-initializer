@@ -122,10 +122,11 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 - [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
 - [ ] Alias generation to use the program command from any path of the system.
 - [X] Require to execute the program with all needed permissions to edit the configuration files.
+- [ ] Errors control and logging.
 
 ## Future features
 - [ ] GUI for Windows.
-- [ ] GUI for Linux - Debian
+- [ ] GUI for Linux - Debian.
 More...
 
 ## Security, Vulnerabilities and Contributing
@@ -133,4 +134,4 @@ If you discover a bugs or security vulnerabilities, please send an e-mail to me 
 Feel free to create your own forks to improve the script or fix the bugs and security vulnerabilities.
 
 ## License
-<i>XAMPP Web Initializer</i> is a Shell based project, open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<i>XAMPP Web Initializer</i> is a Shell and Batch based project, open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
