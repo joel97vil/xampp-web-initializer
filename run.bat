@@ -77,22 +77,23 @@ exit
 :: Getting the params
 ::while getopts "u:i:p:v:h:help:" args;do
 :loop
-    IF %param% == "i" set indexPath=%param% REM INDEX.PHP OR INDEX.HTML PATH (REQUIRED)
-    IF %param% == "p" set vhosts_file=%param% REM VHOST PORT (NOT-REQUIRED, DEFAULT 80)
-    ::IF %param% == "v" set vhosts_file=%param% REM VHOST CONFIG PATH (NOT-REQUIRED, DEFAULT WINDOWS)
-    ::IF %param% == "h" set hosts_file=%param% REM HOSTS RESOLVE PATH (NOT-REQUIRED, DEFAULT WINDOWS)
-    ::IF %param% == "help" GOTO help
-if %param% != "" GOTO loop
+    IF "%~1" == "/i" (indexPath=%~2) REM INDEX.PHP OR INDEX.HTML PATH (REQUIRED)
+    IF "%~1" == "/p" (vhosts_file=%~2) REM VHOST PORT (NOT-REQUIRED, DEFAULT 80)
+    IF "%~1" == "/v" (vhosts_file=%~2) REM VHOST CONFIG PATH (NOT-REQUIRED, DEFAULT WINDOWS)
+    ::IF "%~1" == "h" (hosts_file=%~2) REM HOSTS RESOLVE PATH (NOT-REQUIRED, DEFAULT WINDOWS)
+    IF %~1 == "/help" GOTO help
+if "%~1" != "" GOTO loop
 
-if ([ %url% ] && [ %indexPath% ]); then
+if not "%url%"=="" if not "%indexPath%"="" (
     CALL :beautify_index_path
-    if([ -d %indexPath% ]); then
+    if exist "%indexPath%" (
         CALL :write_config_files
         CALL :copy_htaccess_file
         CALL :success
-    else
+    ) else (
         echo "%red%%indexPath% was not found.%endColour%"
-    end if
-else
+    )
+) else (
     CALL :syntax_error
     CALL :help
+)

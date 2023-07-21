@@ -1,7 +1,7 @@
 # XAMPP Web Inicializer
 A simple shell/batch application which **initializes and configures all the needed configuration files to startup a web application on XAMPP Apache server** (tested on v3.3.0 version) in a local development environment, letting you have a real domain name on your URL working in localhost. The program configures all the needed files to start a virtualhost with the given name and the given path.
 <br />
-This can startup Apache hosted web applications like WordPress, Laravel or Yii2 easily and quickly, making you forget about first configuration part.
+**This can startup Apache hosted web applications like WordPress, Laravel or Yii2 easily and quickly, making you forget about first configuration part.**
 
 ## Table of contents
 - [Requirements](#requirements)
@@ -118,7 +118,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 - [ ] XAMPP compatibility Windows.
 - [X] LAMPP compatibility for Linux - Debian.
 - [ ] Make backup of configuration files before execute the process.
-- [ ] Adding additional parameters (-help, -port and more...)
+- [X] Adding additional parameters (-help, -port and more...)
 - [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
 - [ ] Alias generation to use the program command from any path of the system.
 - [X] Require to execute the program with all needed permissions to edit the configuration files.
@@ -127,6 +127,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 ## Future features
 - [ ] GUI for Windows.
 - [ ] GUI for Linux - Debian.
+- [ ] TOMCAT web applications support.
 More...
 
 ## Security, Vulnerabilities and Contributing

@@ -38,7 +38,7 @@ function help() {
     echo -e "\n${gray}Usage:\n\n${blue} $0 -u [URL] -i [INDEX] ...${endColour}"
     echo -e "\n\t${yellow}-u${gray}     [REQUIRED] The domain (main url) to host the page (without www)${green} Ex: example.com ${endColour}"
     echo -e "\n\t${yellow}-i${gray}     [REQUIRED] The absolute path of the ${red}FOLDER${gray} which containts [index.php] or [index.html] file. (avoid : character on folders) ${green} Ex: C:/xampp/htdocs/example/public ${endColour}"
-    #echo -e "\n\t${yellow}-p${gray}     [OPTIONAL] The port of the virtual host of the page (default 80) ${green} Ex: 443 ${endColour}"
+    echo -e "\n\t${yellow}-p${gray}     [OPTIONAL] The port of the virtual host of the page (default 80) ${green} Ex: 443 ${endColour}"
     #echo -e "\n\t${yellow}-v${gray}     [OPTIONAL] The absolute path of the virtual host XAMPP configuration file ${green} Ex: ${vhostsFile} ${endColour}"
     #echo -e "\n\t${yellow}-h${gray}     [OPTIONAL] The absolute path of the local machine host resolver file ${green} Ex: ${hostsFile} ${endColour}"
 }
@@ -62,13 +62,13 @@ function write_config_files() {
     #Append to the virtual host machine the virtual host config (from the default XAMPP template)
     $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> ${logsFile})
     #Set configuration to the new virtualhost added on virtualhosts file
-    $( sed -e --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
-    $( sed -e --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
-    $( sed -e --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -i -e --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -i -e --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
+    $( sed -i -e --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
     
     #Append to the local machine host resolver file a new line with the URL
-    $( echo -e "127.0.0.1      ${url}" | tee -a ${hostsFile} 2>> ${logsFile})
-    $( echo -e "127.0.0.1      www.${url}" | tee -a ${hostsFile} 2>> ${logsFile})
+    $( echo -e "127.0.0.1\t${url}" | tee -a ${hostsFile} 2>> ${logsFile})
+    $( echo -e "127.0.0.1\twww.${url}" | tee -a ${hostsFile} 2>> ${logsFile})
 }
 
 function copy_htaccess_file() {
@@ -93,10 +93,10 @@ while getopts "u:i:" args;do
     case $args in
         u) url=$OPTARG;; #URL (REQUIRED)
         i) indexPath=$OPTARG;; #INDEX.PHP OR INDEX.HTML PATH (REQUIRED)
-        #p) vhosts_file=$OPTARG;; #VHOST PORT (NOT-REQUIRED, DEFAULT 80)
+        p) vhosts_file=$OPTARG;; #VHOST PORT (NOT-REQUIRED, DEFAULT 80)
         #v) vhosts_file=$OPTARG;; #VHOST CONFIG PATH (NOT-REQUIRED, DEFAULT WINDOWS)
         #h) hosts_file=$OPTARG;; #HOSTS RESOLVE PATH (NOT-REQUIRED, DEFAULT WINDOWS)
-        #help) help;;
+        help) help;;
     esac
 done
 
