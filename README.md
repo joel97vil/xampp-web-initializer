@@ -19,7 +19,7 @@ A simple shell/batch application which **initializes and configures all the need
 Depending on your operating system: 
 
 ### Windows Requirements
-Powershell installed. Windows 8 or newer already has built-in installed Powershell.
+Powershell installed. Windows 7 or newer already has built-in installed Powershell.
 
 ### Linux-Debian Requirements
 Execution permissions (depending where the project folder is located, it already has). <br />
@@ -40,12 +40,12 @@ To use this program in order to initialize a web configuration, <b>startup a Bat
         <th>Example</th>
     </tr>
     <tr>
-        <td><code>u</code></td>
+        <td><code>**u**</code></td>
         <td>[REQUIRED] The domain (main url) to host the page (without www)</td>
         <td><code>/u example.com</code></td>
     </tr>
     <tr>
-        <td><code>i</code></td>
+        <td><code>**i**</code></td>
         <td>[REQUIRED] The absolute path of the which containts [index.php] or [index.html] file. (avoid : character on folders)</td>
         <td><code>/i C:\xampp\htdocs\example\public</code></td>
     </tr>
@@ -83,13 +83,13 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
         <th>Example</th>
     </tr>
     <tr>
-        <td><code>u</code></td>
+        <td><code>**u**</code></td>
         <td>[REQUIRED] The domain (main url) to host the page (without www)</td>
         <td><code>-u example.com</code></td>
     </tr>
     <tr>
-        <td><code>i</code></td>
-        <td>[REQUIRED] The absolute path of the which containts [index.php] or [index.html] file. (avoid : character on folders)</td>
+        <td><code>**i**</code></td>
+        <td>[REQUIRED] The absolute path of the which contains [index.php] or [index.html] file. (avoid : character on folders)</td>
         <td><code>-i /opt/lampp/htdocs/example/public</code></td>
     </tr>
     <tr>
@@ -117,7 +117,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 ## Features
 - [ ] XAMPP compatibility Windows.
 - [X] LAMPP compatibility for Linux - Debian.
-- [ ] Make backup of configuration files before execute the process.
+- [X] Make backup of configuration files before execute the process.
 - [X] Adding additional parameters (-help, -port and more...)
 - [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
 - [ ] Alias generation to use the program command from any path of the system.
@@ -131,8 +131,8 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 More...
 
 ## Security, Vulnerabilities and Contributing
-If you discover a bugs or security vulnerabilities, please send an e-mail to me via [joel97vil@gmail.com](mailto:joel97vil@gmail.com). Any collaboration will be thankful.
-Feel free to create your own forks to improve the script or fix the bugs and security vulnerabilities.
+If you discover a bugs or security vulnerabilities, please [send an e-mail to me via joel97vil@gmail.com](mailto:joel97vil@gmail.com) or [report the issue on this repository](https://github.com/joel97vil/xampp-web-initializer/issues). Any collaboration and error reporting will be welcome.
+Do you want to contribute? Feel free to create your own forks to improve the script or fix the bugs and security vulnerabilities.
 
 ## License
-<i>XAMPP Web Initializer</i> is a Shell and Batch based project, open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**XAMPP Web Initializer** is a Shell and Batch script based project, open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

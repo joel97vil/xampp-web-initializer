@@ -18,10 +18,10 @@ url=""
 port="80"
 hostsFile="/etc/hosts"   #Default path for Ubuntu or "/etc/resolv.conf"
 vhostsFile="/opt/lampp/etc/extra/httpd-vhosts.conf"   #Default path for Ubuntu
-vconfigFile="/opt/lampp/etc/httpd.conf" #Default apache config file to enable/disable virtual hosts
 
 
 ### SCRIPT CONSTANTS SECTION
+vconfigFile="/opt/lampp/etc/httpd.conf" #Default apache config file to enable/disable virtual hosts
 htaccessTemplate="./resources/htaccess.tmpl"
 vhostsTemplate="./resources/vhost.tmpl"
 vconfigLine="#Include etc/extra/httpd-vhosts.conf" #Include remove commented line in config (#487 maybe)
@@ -60,19 +60,22 @@ function beautify_index_path() {
 
 function write_config_files() {
     #Append to the virtual host machine the virtual host config (from the default XAMPP template)
-    $( cat ${vhostsTemplate} >> ${vhostsFile} 2>> ${logsFile})
+    $(cp ${vhostsFile} "${vhostsFile}.bak" 2>> ${logsFile})
+    $(cat ${vhostsTemplate} >> ${vhostsFile} 2>> ${logsFile})
+
     #Set configuration to the new virtualhost added on virtualhosts file
-    $( sed -i -e --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
-    $( sed -i -e --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
-    $( sed -i -e --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
+    $(sed -i -e --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
+    $(sed -i -e --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
+    $(sed -i -e --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
     
     #Append to the local machine host resolver file a new line with the URL
-    $( echo -e "127.0.0.1\t${url}" | tee -a ${hostsFile} 2>> ${logsFile})
-    $( echo -e "127.0.0.1\twww.${url}" | tee -a ${hostsFile} 2>> ${logsFile})
+    $(cp ${hostsFile} "${hostsFile}.bak" 2>> ${logsFile})
+    $(echo -e "127.0.0.1\t${url}" | tee -a ${hostsFile} 2>> ${logsFile})
+    $(echo -e "127.0.0.1\twww.${url}" | tee -a ${hostsFile} 2>> ${logsFile})
 }
 
 function copy_htaccess_file() {
-    $( cp "${htaccessTemplate}" "${indexPath}/.htaccess" 2>> ${logsFile})
+    $(cp "${htaccessTemplate}" "${indexPath}/.htaccess" 2>> ${logsFile})
 }
 
 function enable_virtual_hosts_usage(){
@@ -80,6 +83,7 @@ function enable_virtual_hosts_usage(){
     commentedLine=$( cat "${vconfigFile}" | grep "'${vconfigLine}'")
     #if comment found, remove to enable the usage
     if ([ $commentedLine ]); then
+        $(cp {$vconfigFile} "${vconfigFile}.bak" 2>> ${logsFile})
         $(sed -i -e --debug "'s|^${vconfigLine}conf$|Include ${vhostsFile}|'" "${vconfigFile}" 2>> ${logsFile})
     fi
 }
@@ -102,7 +106,7 @@ done
 
 # Check if the script is being run as root
 if [ "$(id -u)" -ne 0 ]; then
-  echo -e "${red}This script must be run as root. ${gray}Please use 'sudo' to execute it.${endColour}"
+  echo -e "${red}This script must be run as root. Please use ${yellow}'sudo'${red} to execute it.${endColour}"
   exit 1
 fi
 
@@ -114,7 +118,7 @@ if ([ $url ] && [ $indexPath ]); then
         copy_htaccess_file
         success
     else
-        echo -e "${red}${indexPath} was not found. Please, make sure where's the correct web path. ${endColour}"
+        echo -e "${yellow}${indexPath}${red} was not found or ${yellow}${url}{$red} hasn't correct format. Please, make sure where's the correct web path and url. ${endColour}"
     fi
 else
     syntax_error

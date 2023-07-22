@@ -14,13 +14,13 @@ set gray="\e[0;37m\033[1m"
 
 :: ## SCRIPT VARIABLES SECTION ##
 set indexPath=""
-set url="example.com"
+set url=""
 set port="80"
+set htaccessTemplate=".\resources\htaccess.tmpl"
+set vhostsTemplate=".\resources\vhost.tmpl"
 
 
 :: ## SCRIPT CONSTANTS SECTION ##
-set htaccessTemplate=".\resources\htaccess.tmpl"
-set vhostsTemplate=".\resources\vhost.tmpl"
 set hostsFile="C:\Windows\System32\drivers\etc\hosts"   REM Default path for Windows
 set vhostsFile="C:\xampp\apache\conf\extra\httpd-vhosts.conf"   REM Default path for Windows
 set logsFile=".\logs\errors.log"
@@ -58,11 +58,14 @@ exit
 
 :write_config_files
     ::Append to the virtual host machine the virtual host config (from the default XAMPP template)
+    copy %vhostsFile% "%vhostsFile%.bak"
     type %vhostsTemplate% >> %vhostsFile% 2>> %logsFile%)
     powershell -Command "(Get-Content '%vhostsFile%') -replace '\[URL\]', '%url%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
     powershell -Command "(Get-Content '%vhostsFile%') -replace '\[PORT\]', '%port%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
     powershell -Command "(Get-Content '%vhostsFile%') -replace '\[INDEX_PATH\]', '%indexPath%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
+
     ::Append to the local machine host resolver file a new line with the URL
+    copy %hostsFile% "%vhostsFile%.bak"
     type "127.0.0.1      %url%" >> "%hostsFile%" 2>> %logsFile%)
     type "127.0.0.1      www.%url%" >> "%hostsFile%" 2>> %logsFile%)
 exit
@@ -75,8 +78,8 @@ exit
 :: ## RUN SECTION ##
 
 :: Getting the params
-::while getopts "u:i:p:v:h:help:" args;do
 :loop
+    IF "%~1" == "/u" (url=%~2) REM INDEX.PHP OR INDEX.HTML PATH (REQUIRED)
     IF "%~1" == "/i" (indexPath=%~2) REM INDEX.PHP OR INDEX.HTML PATH (REQUIRED)
     IF "%~1" == "/p" (vhosts_file=%~2) REM VHOST PORT (NOT-REQUIRED, DEFAULT 80)
     IF "%~1" == "/v" (vhosts_file=%~2) REM VHOST CONFIG PATH (NOT-REQUIRED, DEFAULT WINDOWS)
