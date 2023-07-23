@@ -23,7 +23,8 @@ set vhostsTemplate=".\resources\vhost.tmpl"
 :: ## SCRIPT CONSTANTS SECTION ##
 set hostsFile="C:\Windows\System32\drivers\etc\hosts"   REM Default path for Windows
 set vhostsFile="C:\xampp\apache\conf\extra\httpd-vhosts.conf"   REM Default path for Windows
-set logsFile=".\logs\errors.log"
+set logsErrors=".\logs\errors.log"
+set logsActions=".\logs\details.log"
 
 
 :: ## FUNCTIONS SECTION ##
@@ -59,19 +60,19 @@ exit
 :write_config_files
     ::Append to the virtual host machine the virtual host config (from the default XAMPP template)
     copy %vhostsFile% "%vhostsFile%.bak"
-    type %vhostsTemplate% >> %vhostsFile% 2>> %logsFile%)
-    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[URL\]', '%url%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
-    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[PORT\]', '%port%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
-    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[INDEX_PATH\]', '%indexPath%' | Set-Content '%vhostsFile%'" 2>> %logsFile%
+    type %vhostsTemplate% >> %vhostsFile% >> %logsActions% 2>> %logsErrors%)
+    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[URL\]', '%url%' | Set-Content '%vhostsFile%'" >> %logsActions% 2>> %logsErrors%
+    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[PORT\]', '%port%' | Set-Content '%vhostsFile%'" >> %logsActions% 2>> %logsErrors%
+    powershell -Command "(Get-Content '%vhostsFile%') -replace '\[INDEX_PATH\]', '%indexPath%' | Set-Content '%vhostsFile%'" >> %logsActions% 2>> %logsErrors%
 
     ::Append to the local machine host resolver file a new line with the URL
     copy %hostsFile% "%vhostsFile%.bak"
-    type "127.0.0.1      %url%" >> "%hostsFile%" 2>> %logsFile%)
-    type "127.0.0.1      www.%url%" >> "%hostsFile%" 2>> %logsFile%)
+    type "127.0.0.1      %url%" >> "%hostsFile%" >> %logsActions% 2>> %logsErrors%)
+    type "127.0.0.1      www.%url%" >> "%hostsFile%" >> %logsActions% 2>> %logsErrors%)
 exit
 
 :copy_htaccess_file
-    copy "%htaccessTemplate%" "%indexPath%/.htaccess" 2>> %logsFile%
+    copy "%htaccessTemplate%" "%indexPath%/.htaccess" >> %logsActions% 2>> %logsErrors%
 exit
 
 

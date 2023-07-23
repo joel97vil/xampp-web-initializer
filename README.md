@@ -31,7 +31,7 @@ Depending on your operating system:
 ### Windows Usage
 To use this program in order to initialize a web configuration, <b>startup a Batch (cmd) as Administrator</b>.
 <br />
-<code>./run.bat /u example.com /i C:\xampp\htdocs\test\public [OPTIONAL PARAMS...]</code>
+<code>run.bat /u example.com /i C:\xampp\htdocs\test\public [OPTIONAL PARAMS...]</code>
 
 <table>
     <tr>
@@ -40,12 +40,12 @@ To use this program in order to initialize a web configuration, <b>startup a Bat
         <th>Example</th>
     </tr>
     <tr>
-        <td><code>**u**</code></td>
+        <td><code>u</code></td>
         <td>[REQUIRED] The domain (main url) to host the page (without www)</td>
         <td><code>/u example.com</code></td>
     </tr>
     <tr>
-        <td><code>**i**</code></td>
+        <td><code>i</code></td>
         <td>[REQUIRED] The absolute path of the which containts [index.php] or [index.html] file. (avoid : character on folders)</td>
         <td><code>/i C:\xampp\htdocs\example\public</code></td>
     </tr>
@@ -83,12 +83,12 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
         <th>Example</th>
     </tr>
     <tr>
-        <td><code>**u**</code></td>
+        <td><code>u</code></td>
         <td>[REQUIRED] The domain (main url) to host the page (without www)</td>
         <td><code>-u example.com</code></td>
     </tr>
     <tr>
-        <td><code>**i**</code></td>
+        <td><code>i</code></td>
         <td>[REQUIRED] The absolute path of the which contains [index.php] or [index.html] file. (avoid : character on folders)</td>
         <td><code>-i /opt/lampp/htdocs/example/public</code></td>
     </tr>
@@ -128,7 +128,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 - [ ] GUI for Windows.
 - [ ] GUI for Linux - Debian.
 - [ ] TOMCAT web applications support.
-More...
+- [ ] More...
 
 ## Security, Vulnerabilities and Contributing
 If you discover a bugs or security vulnerabilities, please [send an e-mail to me via joel97vil@gmail.com](mailto:joel97vil@gmail.com) or [report the issue on this repository](https://github.com/joel97vil/xampp-web-initializer/issues). Any collaboration and error reporting will be welcome.

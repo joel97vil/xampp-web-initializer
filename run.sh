@@ -25,8 +25,8 @@ vconfigFile="/opt/lampp/etc/httpd.conf" #Default apache config file to enable/di
 htaccessTemplate="./resources/htaccess.tmpl"
 vhostsTemplate="./resources/vhost.tmpl"
 vconfigLine="#Include etc/extra/httpd-vhosts.conf" #Include remove commented line in config (#487 maybe)
-logsFile="./logs/errors.log"
-
+logsErrors="./logs/errors.log"
+logsActions="./logs/details.log"
 
 ### FUNCTIONS SECTION
 function ctrl_c() {
@@ -60,22 +60,22 @@ function beautify_index_path() {
 
 function write_config_files() {
     #Append to the virtual host machine the virtual host config (from the default XAMPP template)
-    $(cp ${vhostsFile} "${vhostsFile}.bak" 2>> ${logsFile})
-    $(cat ${vhostsTemplate} >> ${vhostsFile} 2>> ${logsFile})
+    $(cp ${vhostsFile} "${vhostsFile}.bak" 2>> ${logsErrors})
+    $(cat ${vhostsTemplate} >> ${vhostsFile} 2>> ${logsErrors})
 
     #Set configuration to the new virtualhost added on virtualhosts file
-    $(sed -i -e --debug "s@\[URL\]@${url}@" ${vhostsFile} 2>> ${logsFile})
-    $(sed -i -e --debug "s@\[PORT\]@${port}@" ${vhostsFile} 2>> ${logsFile})
-    $(sed -i -e --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} 2>> ${logsFile})
+    $(sudo sed -i --debug "s@\[URL\]@${url}@" ${vhostsFile} >> ${logsActions} 2>> ${logsErrors})
+    $(sudo sed -i --debug "s@\[PORT\]@${port}@" ${vhostsFile} >> ${logsActions} 2>> ${logsErrors})
+    $(sudo sed -i --debug "s@\[INDEX_PATH\]@${indexPath}@" ${vhostsFile} >> ${logsActions} 2>> ${logsErrors})
     
     #Append to the local machine host resolver file a new line with the URL
-    $(cp ${hostsFile} "${hostsFile}.bak" 2>> ${logsFile})
-    $(echo -e "127.0.0.1\t${url}" | tee -a ${hostsFile} 2>> ${logsFile})
-    $(echo -e "127.0.0.1\twww.${url}" | tee -a ${hostsFile} 2>> ${logsFile})
+    $(cp ${hostsFile} "${hostsFile}.bak" >> ${logsActions} 2>> ${logsErrors})
+    $(echo -e "127.0.0.1\t${url}" | tee -a ${hostsFile} >> ${logsActions} 2>> ${logsErrors})
+    $(echo -e "127.0.0.1\twww.${url}" | tee -a ${hostsFile} >> ${logsActions} 2>> ${logsErrors})
 }
 
 function copy_htaccess_file() {
-    $(cp "${htaccessTemplate}" "${indexPath}/.htaccess" 2>> ${logsFile})
+    $(cp "${htaccessTemplate}" "${indexPath}/.htaccess" >> ${logsActions} 2>> ${logsErrors})
 }
 
 function enable_virtual_hosts_usage(){
@@ -83,8 +83,8 @@ function enable_virtual_hosts_usage(){
     commentedLine=$( cat "${vconfigFile}" | grep "'${vconfigLine}'")
     #if comment found, remove to enable the usage
     if ([ $commentedLine ]); then
-        $(cp {$vconfigFile} "${vconfigFile}.bak" 2>> ${logsFile})
-        $(sed -i -e --debug "'s|^${vconfigLine}conf$|Include ${vhostsFile}|'" "${vconfigFile}" 2>> ${logsFile})
+        $(cp {$vconfigFile} "${vconfigFile}.bak" >> ${logsActions} 2>> ${logsErrors})
+        $(sed -i -e --debug "'s|^${vconfigLine}conf$|Include ${vhostsFile}|'" "${vconfigFile}" >> ${logsActions} 2>> ${logsErrors})
     fi
 }
 
