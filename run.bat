@@ -26,6 +26,7 @@ set vhostsFile="C:\xampp\apache\conf\extra\httpd-vhosts.conf"   REM Default path
 set logsErrors=".\logs\errors.log"
 set logsActions=".\logs\details.log"
 
+call :main
 
 :: ## FUNCTIONS SECTION ##
 :ctrl_c
@@ -87,7 +88,10 @@ exit
     ::IF "%~1" == "h" (hosts_file=%~2) REM HOSTS RESOLVE PATH (NOT-REQUIRED, DEFAULT WINDOWS)
     IF %~1 == "/help" GOTO help
 if "%~1" != "" GOTO loop
+exit
 
+:main
+goto :loop
 if not "%url%"=="" if not "%indexPath%"="" (
     CALL :beautify_index_path
     if exist "%indexPath%" (
@@ -101,3 +105,4 @@ if not "%url%"=="" if not "%indexPath%"="" (
     CALL :syntax_error
     CALL :help
 )
+exit /B 0

@@ -74,7 +74,7 @@ To use this program in order to initialize a web configuration, <b>startup a Bat
 ### Linux-Debian Usage
 To use this program in order to initialize a web configuration, <b>startup a Bash Shell as root</b>.
 <br />
-<code>sudo ./run.sh -u example.com -i /c/xampp/htdocs/test/public [OPTIONAL PARAMS...]</code>
+<code>sudo ./run.sh -u example.com -i /opt/lampp/htdocs/test/public [OPTIONAL PARAMS...]</code>
 
 <table>
     <tr>
@@ -120,14 +120,15 @@ To use this program in order to initialize a web configuration, <b>startup a Bas
 - [X] Make backup of configuration files before execute the process.
 - [X] Adding additional parameters (-help, -port and more...)
 - [X] Various built-in default configurations for different development environments (Windows / Linux-Debian).
-- [ ] Alias generation to use the program command from any path of the system.
+- [ ] Alias generation to use the program command from any path of the system (System variable).
 - [X] Require to execute the program with all needed permissions to edit the configuration files.
-- [ ] Errors control and logging.
+- [X] Errors control and logging.
 
 ## Future features
 - [ ] GUI for Windows.
 - [ ] GUI for Linux - Debian.
 - [ ] TOMCAT web applications support.
+- [ ] Disable / remove local virtual host.
 - [ ] More...
 
 ## Security, Vulnerabilities and Contributing
